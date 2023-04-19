@@ -9,18 +9,11 @@ def deleteStudent():
     c.execute("DELETE FROM students where student_id =?",sbox.get(1.0,'end-1c'))
     conn.commit()
     conn.close
-
-    
-    
-    
-    
     conn.commit()
     conn.close()
 
 
 def newStudentWindow():
-    
-    
     #this code inserts the new student into The database and then Closes the window
     def addNew(first,last,g):
         conn=sqlite3.connect('studentManagment.db')
