@@ -68,6 +68,24 @@ c.execute("""SELECT subjects.subject_name,teachers.first,teachers.last FROM clas
           JOIN teachers ON classes.teacher_id=teachers.teacher_id 
           JOIN subjects ON classes.subject_id=subjects.subject_id """)
 print(c.fetchall())
+          
+#creates table that connects students to classes they are enrolled in
+#c.execute("""
+ #          CREATE TABLE StudentToClass(
+  #         id INTEGER PRIMARY KEY AUTOINCREMENT,
+   #        student_id INTEGER,
+    #       class_id INTEGER
+     #          )
+      #     """)
+#c.execute("INSERT INTO studentToClass(student_id,class_id) VALUES(1,1)")
+
+c.execute("""SELECT students.first,students.last,subjects.subject_name,teachers.last 
+          FROM students JOIN studentToClass ON students.student_id=studentToClass.student_id
+          JOIN classes ON classes.class_id=studentToClass.class_id
+          JOIN subjects ON classes.subject_id=subjects.subject_id
+          JOIN teachers ON teachers.teacher_id=classes.teacher_id""")
+
+print(c.fetchall())
 conn.commit()
 conn.close()
 
