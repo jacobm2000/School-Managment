@@ -58,7 +58,7 @@ conn.commit()
      #     block INTEGER
       #   ) """)
 
-#c.execute("INSERT INTO classes(subject_id,teacher_id,block) VALUES(2,1,1)")
+#c.execute("INSERT INTO classes(subject_id,teacher_id,block) VALUES(2,5,1)")
 
 #see all classes
 c.execute("SELECT * FROM classes")
