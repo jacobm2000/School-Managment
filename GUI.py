@@ -64,6 +64,41 @@ def deleteSubject():
     conn.close()
 
 
+def editStudentWindow():
+    #this code inserts the new student into The database and then Closes the window
+    conn=sqlite3.connect('studentManagment.db')
+    c=conn.cursor()
+    def update(first,last,g,ID):
+        c.execute("UPDATE students SET first=?,last=?,grade=? WHERE student_id=?",(first,last,g,ID))
+        conn.commit()
+        conn.close()
+        top.destroy()
+    print(sbox.get(1.0,'end-1c'))
+    c.execute("SELECT * FROM students WHERE student_id=?",sbox.get(1.0,'end-1c'))
+    df=pd.DataFrame(c.fetchall())
+    print(df)
+   
+    df.columns=['student_id','First','Last','Grade']
+   
+    #top is a new window that pops up to add a new student to the students table
+    top=tk.Toplevel(root)
+    tk.Label(top,text="First Name").pack()
+    fname=tk.Text(top,width=20,height=1)
+    fname.insert('end-1c',df['First'][0])
+    fname.pack()
+    tk.Label(top,text="Last Name").pack()
+    lname=tk.Text(top,width=20,height=1)
+    lname.insert('end-1c',df['Last'][0])
+    lname.pack()
+    tk.Label(top,text="Grade").pack()
+    grade=tk.Text(top,width=20,height=1)
+    grade.insert('end-1c',df["Grade"][0])
+    grade.pack()
+    ub=tk.Button(top,text="Update",command=lambda: update(fname.get(1.0,'end-1c'),lname.get(1.0,'end-1c'),grade.get(1.0,'end-1c'),sbox.get(1.0,'end-1c')))
+    ub.pack()
+
+
+
 def newStudentWindow():
     #this code inserts the new student into The database and then Closes the window
     def addNew(first,last,g):
@@ -245,6 +280,8 @@ slabel.place(x=80,y=165)
 #When pressed deletes the student with the id entered in the textbox above
 dbutton=tk.Button(root,text="delete",command=deleteStudent)
 dbutton.place(x=250,y=165)
+editStudent=tk.Button(root,text="edit",command=editStudentWindow)
+editStudent.place(x=400,y=165)
 #Text box to enter teacher id of the teacher the user wishes to remove from the teachers table
 tbox=tk.Text(root,width=5,height=1)
 tbox.place(x=200,y=240)
