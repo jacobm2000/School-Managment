@@ -73,29 +73,36 @@ def editStudentWindow():
         conn.commit()
         conn.close()
         top.destroy()
-    print(sbox.get(1.0,'end-1c'))
-    c.execute("SELECT * FROM students WHERE student_id=?",sbox.get(1.0,'end-1c'))
-    df=pd.DataFrame(c.fetchall())
-    print(df)
-   
-    df.columns=['student_id','First','Last','Grade']
-   
-    #top is a new window that pops up to add a new student to the students table
-    top=tk.Toplevel(root)
-    tk.Label(top,text="First Name").pack()
-    fname=tk.Text(top,width=20,height=1)
-    fname.insert('end-1c',df['First'][0])
-    fname.pack()
-    tk.Label(top,text="Last Name").pack()
-    lname=tk.Text(top,width=20,height=1)
-    lname.insert('end-1c',df['Last'][0])
-    lname.pack()
-    tk.Label(top,text="Grade").pack()
-    grade=tk.Text(top,width=20,height=1)
-    grade.insert('end-1c',df["Grade"][0])
-    grade.pack()
-    ub=tk.Button(top,text="Update",command=lambda: update(fname.get(1.0,'end-1c'),lname.get(1.0,'end-1c'),grade.get(1.0,'end-1c'),sbox.get(1.0,'end-1c')))
-    ub.pack()
+    #checks to see if the student Id box is empty and if it is an error will display
+    if(sbox.get(1.0,'end-1c')==''):
+        tk.messagebox.showinfo(title="Error", message="Student Id box is empty")
+    else:
+        c.execute("SELECT * FROM students WHERE student_id=?",[sbox.get(1.0,'end-1c')])
+        x=c.fetchall()
+    #checks to see if the student id exists and if it dosn't an error will popup
+    if(x==[]):
+        tk.messagebox.showinfo(title="Error", message="Student id not found")
+
+    else:
+        df=pd.DataFrame(x)
+        df.columns=['student_id','First','Last','Grade']
+       
+        #top is a new window that pops up to add a new student to the students table
+        top=tk.Toplevel(root)
+        tk.Label(top,text="First Name").pack()
+        fname=tk.Text(top,width=20,height=1)
+        fname.insert('end-1c',df['First'][0])
+        fname.pack()
+        tk.Label(top,text="Last Name").pack()
+        lname=tk.Text(top,width=20,height=1)
+        lname.insert('end-1c',df['Last'][0])
+        lname.pack()
+        tk.Label(top,text="Grade").pack()
+        grade=tk.Text(top,width=20,height=1)
+        grade.insert('end-1c',df["Grade"][0])
+        grade.pack()
+        ub=tk.Button(top,text="Update",command=lambda: update(fname.get(1.0,'end-1c'),lname.get(1.0,'end-1c'),grade.get(1.0,'end-1c'),sbox.get(1.0,'end-1c')))
+        ub.pack()
 
 
 
