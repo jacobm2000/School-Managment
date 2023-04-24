@@ -217,76 +217,80 @@ def getTeachers():
     
 root = tk.Tk()
 root.title('Student Manager')
+root.geometry("500x500")
+root.resizable(False,False)
 #output box that shows data
 obox=tk.Text(root,height=10,width=50)
 obox.pack()
+
 #Button to display all students to the output box
 b1=tk.Button(root, text="Get Students",command=getStudents)
-b1.pack()
+b1.place(x=0,y=165)
 #Button to display all teachers to the output box
 b2=tk.Button(root, text="Get Teachers",command=getTeachers)
+b2.place(x=0,y=240)
 #button to see all classes
 b3=tk.Button(root, text="Get Classes",command=getClasses)
+b3.place(x=0,y=320)
 #button to see all classes
 b4=tk.Button(root, text="Get Subjects",command=getSubjects)
-b1.pack()
-b2.pack()
-b3.pack()
-b4.pack()
+b4.place(x=0,y=400)
+
+
 #Text box to enter student id of the student the user wishes to remove from the stutends table
 sbox=tk.Text(root,width=5,height=1)
-sbox.pack()
+sbox.place(x=200,y=165)
 slabel=tk.Label(root,text="Student Id To Delete")
-slabel.pack()
+slabel.place(x=80,y=165)
 #When pressed deletes the student with the id entered in the textbox above
 dbutton=tk.Button(root,text="delete",command=deleteStudent)
-dbutton.pack()
+dbutton.place(x=250,y=165)
 #Text box to enter teacher id of the teacher the user wishes to remove from the teachers table
 tbox=tk.Text(root,width=5,height=1)
-tbox.pack()
+tbox.place(x=200,y=240)
 tlabel=tk.Label(root,text="Teacher Id To Delete")
-tlabel.pack()
+tlabel.place(x=80,y=240)
 
 
 #When pressed deletes the teacher with the id entered in the textbox above
 dbutton2=tk.Button(root,text="delete",command=deleteTeacher)
-dbutton2.pack()
+dbutton2.place(x=250,y=240)
 
 
 cbox=tk.Text(root,width=5,height=1)
-cbox.pack()
+cbox.place(x=200,y=320)
 
 clabel=tk.Label(root,text="Class Id To Delete")
-clabel.pack()
+clabel.place(x=80,y=320)
 
 #When pressed deletes the class with the id entered in the textbox above
 dbutton3=tk.Button(root,text="delete",command=deleteClass)
-dbutton3.pack()
+dbutton3.place(x=250,y=320)
 
 
 subbox=tk.Text(root,width=5,height=1)
-subbox.pack()
+subbox.place(x=200,y=400)
 
 sublabel=tk.Label(root,text="Subject Id To Delete")
-sublabel.pack()
+sublabel.place(x=80,y=400)
 
 #When pressed deletes the class with the id entered in the textbox above
 dbutton4=tk.Button(root,text="delete",command=deleteSubject)
-dbutton4.pack()
+dbutton4.place(x=250,y=400)
 
 #when pressed opens a new window for adding a new student
 b5=tk.Button(text="Add New Student",command=newStudentWindow)
-b5.pack()
+b5.place(x=300,y=165)
 
 #when pressed opens a new window for adding a new student
 b6=tk.Button(text="Add New Teacher",command=newTeacherWindow)
-b6.pack()
+b6.place(x=300,y=240)
 
 #when pressed opens a new window for adding a new Class
 b7=tk.Button(text="Add New Class",command=newClassWindow)
-b7.pack()
+b7.place(x=300,y=320)
 #when pressed opens a new window for adding a new Class
 b8=tk.Button(text="Add New subject",command=newSubjectWindow)
-b8.pack()
+b8.place(x=300,y=400)
 
 root.mainloop()
