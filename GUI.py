@@ -78,6 +78,7 @@ def editStudentWindow():
     #checks to see if the student Id box is empty and if it is an error will display
     if(sbox.get(1.0,'end-1c')==''):
         tk.messagebox.showinfo(title="Error", message="Student Id box is empty")
+        return None
     else:
         c.execute("SELECT * FROM students WHERE student_id=?",[sbox.get(1.0,'end-1c')])
         x=c.fetchall()
@@ -118,6 +119,7 @@ def editTeacherWindow():
     #checks to see if the teacher Id box is empty and if it is an error will display
     if(tbox.get(1.0,'end-1c')==''):
         tk.messagebox.showinfo(title="Error", message="Teacher Id box is empty")
+        return None
     else:
         c.execute("SELECT * FROM teachers WHERE teacher_id=?",[tbox.get(1.0,'end-1c')])
         x=c.fetchall()
@@ -155,6 +157,7 @@ def editClassWindow():
     #checks to see if the teacher Id box is empty and if it is an error will display
     if(cbox.get(1.0,'end-1c')==''):
         tk.messagebox.showinfo(title="Error", message="Class Id box is empty")
+        return None
     else:
         c.execute("SELECT * FROM classes WHERE class_id=?",[cbox.get(1.0,'end-1c')])
         x=c.fetchall()
