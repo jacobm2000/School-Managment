@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import StringVar
 import tkinter.font as tkFont
 import pandas as pd
 import sqlite3
@@ -65,9 +66,10 @@ def deleteSubject():
 
 
 def editStudentWindow():
-    #this code inserts the new student into The database and then Closes the window
+   
     conn=sqlite3.connect('studentManagment.db')
     c=conn.cursor()
+     #this code updates student entry
     def update(first,last,g,ID):
         c.execute("UPDATE students SET first=?,last=?,grade=? WHERE student_id=?",(first,last,g,ID))
         conn.commit()
@@ -87,7 +89,7 @@ def editStudentWindow():
         df=pd.DataFrame(x)
         df.columns=['student_id','First','Last','Grade']
        
-        #top is a new window that pops up to add a new student to the students table
+        #top is a new window that pops up to edit an existing student
         top=tk.Toplevel(root)
         tk.Label(top,text="First Name").pack()
         fname=tk.Text(top,width=20,height=1)
@@ -103,7 +105,84 @@ def editStudentWindow():
         grade.pack()
         ub=tk.Button(top,text="Update",command=lambda: update(fname.get(1.0,'end-1c'),lname.get(1.0,'end-1c'),grade.get(1.0,'end-1c'),sbox.get(1.0,'end-1c')))
         ub.pack()
+        
+def editTeacherWindow():
+    conn=sqlite3.connect('studentManagment.db')
+    c=conn.cursor()
+        #this code updates teacher entry
+    def update(first,last,ID):
+        c.execute("UPDATE teachers SET first=?,last=? WHERE teacher_id=?",(first,last,ID))
+        conn.commit()
+        conn.close()
+        top.destroy()
+    #checks to see if the teacher Id box is empty and if it is an error will display
+    if(tbox.get(1.0,'end-1c')==''):
+        tk.messagebox.showinfo(title="Error", message="Teacher Id box is empty")
+    else:
+        c.execute("SELECT * FROM teachers WHERE teacher_id=?",[tbox.get(1.0,'end-1c')])
+        x=c.fetchall()
+    #checks to see if the teacher id exists and if it dosn't an error will popup
+    if(x==[]):
+        tk.messagebox.showinfo(title="Error", message="Teacher id not found")
 
+    else:
+        df=pd.DataFrame(x)
+        df.columns=['teacher_id','First','Last']
+       
+        #top is a new window that pops up to edit an existing teacher
+        top=tk.Toplevel(root)
+        tk.Label(top,text="First Name").pack()
+        fname=tk.Text(top,width=20,height=1)
+        fname.insert('end-1c',df['First'][0])
+        fname.pack()
+        tk.Label(top,text="Last Name").pack()
+        lname=tk.Text(top,width=20,height=1)
+        lname.insert('end-1c',df['Last'][0])
+        lname.pack()
+        tk.Label(top,text="Grade").pack()
+        ub=tk.Button(top,text="Update",command=lambda: update(fname.get(1.0,'end-1c'),lname.get(1.0,'end-1c'),tbox.get(1.0,'end-1c')))
+        ub.pack()
+
+def editClassWindow():
+    conn=sqlite3.connect('studentManagment.db')
+    c=conn.cursor()
+        #this code updates teacher entry
+    def update(subject_id,teacher_id,block,ID):
+        c.execute("UPDATE classes SET subject_id=?,teacher_id=?,block=? WHERE class_id=?",(subject_id,teacher_id,block,ID))
+        conn.commit()
+        conn.close()
+        top.destroy()
+    #checks to see if the teacher Id box is empty and if it is an error will display
+    if(cbox.get(1.0,'end-1c')==''):
+        tk.messagebox.showinfo(title="Error", message="Class Id box is empty")
+    else:
+        c.execute("SELECT * FROM classes WHERE class_id=?",[cbox.get(1.0,'end-1c')])
+        x=c.fetchall()
+    #checks to see if the teacher id exists and if it dosn't an error will popup
+    if(x==[]):
+        tk.messagebox.showinfo(title="Error", message="Class id not found")
+
+    else:
+        df=pd.DataFrame(x)
+        df.columns=['class_id','subject_id','teacher_id','block']
+       
+        #top is a new window that pops up to edit an existing teacher
+        top=tk.Toplevel(root)
+        tk.Label(top,text="Subject Id").pack()
+        subID=tk.Text(top,width=20,height=1)
+        subID.insert('end-1c',df['subject_id'][0])
+        subID.pack()
+        tk.Label(top,text="Teacher_id").pack()
+        tID=tk.Text(top,width=20,height=1)
+        tID.insert('end-1c',df['teacher_id'][0])
+        tID.pack()
+        tk.Label(top,text="Block").pack()
+        block=tk.Text(top,width=20,height=1)
+        block.insert('end-1c',df['block'][0])
+        block.pack()
+        tk.Label(top,text="Grade").pack()
+        ub=tk.Button(top,text="Update",command=lambda: update(subID.get(1.0,'end-1c'),tID.get(1.0,'end-1c'),block.get(1.0,'end-1c'),cbox.get(1.0,'end-1c')))
+        ub.pack()
 
 
 def newStudentWindow():
@@ -128,6 +207,7 @@ def newStudentWindow():
     grade=tk.Text(top,width=20,height=1)
     grade.pack()
     tk.Button(top,text="add",command=lambda: addNew(fname.get(1.0,'end-1c'),lname.get(1.0,'end-1c'),grade.get(1.0,'end-1c') )).pack()
+
 def getStudents():
     obox.delete(1.0,'end-1c')
     conn=sqlite3.connect('studentManagment.db')
@@ -140,6 +220,23 @@ def getStudents():
     obox.insert('end-1c',df)
     conn.close()
     
+def studentSearch():
+
+    obox.delete(1.0,'end-1c')
+    conn=sqlite3.connect('studentManagment.db')
+    c=conn.cursor()
+    c.execute("SELECT * FROM students WHERE last=?",[searchbox.get(1.0,'end-1c')])
+    x=c.fetchall()
+    if(x==[]):
+        obox.insert('end-1c','No Students Found')
+    else:
+        df=pd.DataFrame(x)
+        df.columns=['student_id','First','Last','Grade']
+        df.set_index('student_id',inplace=True)
+        obox.insert('end-1c',df)
+        conn.close()
+
+
 def getTeachers():
     obox.delete(1.0,'end-1c')
     conn=sqlite3.connect('studentManagment.db')
@@ -150,6 +247,23 @@ def getTeachers():
     df.columns=['Teacher_id','First','Last']
     df.set_index('Teacher_id',inplace=True)
     obox.insert('end-1c',df)
+
+def teacherSearch():
+
+    obox.delete(1.0,'end-1c')
+    conn=sqlite3.connect('studentManagment.db')
+    c=conn.cursor()
+    c.execute("SELECT * FROM teachers WHERE last=?",[searchbox2.get(1.0,'end-1c')])
+    x=c.fetchall()
+    if(x==[]):
+        obox.insert('end-1c','No teacher Found')
+    else:
+        df=pd.DataFrame(x)
+        df.columns=['teacher_id','First','Last']
+        df.set_index('teacher_id',inplace=True)
+        obox.insert('end-1c',df)
+        conn.close()
+
 
 def getClasses():
     obox.delete(1.0,'end-1c')
@@ -235,28 +349,9 @@ def newClassWindow():
     block.pack()
     
     tk.Button(top,text="add",command=lambda: addNew(s_id.get(1.0,'end-1c'),t_id.get(1.0,'end-1c'),block.get(1.0,'end-1c') )).pack()
-def getStudents():
-    obox.delete(1.0,'end-1c')
-    conn=sqlite3.connect('studentManagment.db')
-    c=conn.cursor()
-    c.execute("SELECT * FROM students")
-    df=pd.DataFrame(c.fetchall())
-   
-    df.columns=['student_id','First','Last','Grade']
-    df.set_index('student_id',inplace=True)
-    obox.insert('end-1c',df)
-    conn.close()
-def getTeachers():
-    obox.delete(1.0,'end-1c')
-    conn=sqlite3.connect('studentManagment.db')
-    c=conn.cursor()
-    c.execute("SELECT * FROM Teachers")
-    df=pd.DataFrame(c.fetchall())
-   
-    df.columns=['Teacher_id','First','Last']
-    df.set_index('Teacher_id',inplace=True)
-    obox.insert('end-1c',df)
-    
+
+
+
 root = tk.Tk()
 root.title('Student Manager')
 root.geometry("500x500")
@@ -284,11 +379,32 @@ sbox=tk.Text(root,width=5,height=1)
 sbox.place(x=200,y=165)
 slabel=tk.Label(root,text="Student Id To Delete")
 slabel.place(x=80,y=165)
+
+searchLabel=tk.Label(root,text="Last Name")
+searchLabel.place(x=0,y=200)
+searchbox=tk.Text(root,width=9,height=1)
+searchbox.place(x=70,y=200)
+searchButton=tk.Button(root,text="search",command=studentSearch)
+searchButton.place(x=150,y=195)
+
+searchLabel2=tk.Label(root,text="Last Name")
+searchLabel2.place(x=0,y=275)
+searchbox2=tk.Text(root,width=9,height=1)
+searchbox2.place(x=70,y=275)
+searchButton2=tk.Button(root,text="search",command=teacherSearch)
+searchButton2.place(x=150,y=270)
+
+
 #When pressed deletes the student with the id entered in the textbox above
 dbutton=tk.Button(root,text="delete",command=deleteStudent)
 dbutton.place(x=250,y=165)
 editStudent=tk.Button(root,text="edit",command=editStudentWindow)
-editStudent.place(x=400,y=165)
+editStudent.place(x=405,y=165)
+editTeacher=tk.Button(root,text="edit",command=editTeacherWindow)
+editTeacher.place(x=405,y=240)
+editTeacher=tk.Button(root,text="edit",command=editTeacherWindow)
+editClass=tk.Button(root,text="edit",command=editClassWindow)
+editClass.place(x=390,y=320)
 #Text box to enter teacher id of the teacher the user wishes to remove from the teachers table
 tbox=tk.Text(root,width=5,height=1)
 tbox.place(x=200,y=240)
