@@ -4,4 +4,4 @@ entries from each table
 
 ### Screenshot
 
-![](./screenshot.jpg)
+![](./screenshot.JPG)
