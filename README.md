@@ -4,4 +4,4 @@ entries from each table
 
 ### Demo
 
-![](./demo.GIF)
+![](./demo.gif)
