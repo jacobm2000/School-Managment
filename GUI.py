@@ -356,7 +356,7 @@ def newClassWindow():
 
 
 root = tk.Tk()
-root.title('Student Manager')
+root.title('School Manager')
 root.geometry("500x500")
 root.resizable(False,False)
 #output box that shows data
